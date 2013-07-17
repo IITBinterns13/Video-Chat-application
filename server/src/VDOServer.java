@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.xml.parsers.DocumentBuilder;
@@ -106,8 +104,6 @@ public class VDOServer implements Runnable{
 			}
                 //check if any one is present in table address
                 checktable();
-                         //set all the users off line initially
-			//setAllOffline();
                          //start servertime class with the constructor
                              new ServerTime(log);
        
@@ -263,7 +259,7 @@ public class VDOServer implements Runnable{
 			}
 			catch(IOException ioException)
 			{
-				log.append("ERRORinreadxml : " + ioException.getMessage() + "\n");
+				log.append("ERROR : " + ioException.getMessage() + "\n");
 			}
 		}
         }
@@ -296,7 +292,7 @@ public class VDOServer implements Runnable{
 		//string of IP & MAC add of requested client
 		private String ipmac;      
                 //MAC address pattern
-                private String pattern = "([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}";
+               // private String pattern = "([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}";
         private boolean timestamp;
 		
 		public ProcessPacket(DatagramPacket receivePacket1)
@@ -383,12 +379,12 @@ public class VDOServer implements Runnable{
                                 //to free the user
                                 else if(pdata[0].equalsIgnoreCase("free"))
                                 {
-                                    log.append(pdata[0]+" me Request \n");
+                                   // log.append("Free me request \n");
                                     freeUserMethod();
                                 }
                                 else if(pdata[0].equalsIgnoreCase("group"))
                                 {
-                                    log.append(pdata[0]+" me Request \n");
+                                    log.append("Group Communication Request \n");
                                     groupIpMethod();
                                 }
                         }
@@ -433,20 +429,20 @@ public class VDOServer implements Runnable{
                                 {
                                                     ipmac = "registered";
                                              
-                                                    log.append(" user is registered\n");
+                                                   log.append("User is logged in\n");
                                  
                                 }
                                 else
 				{
 					ipmac = "not";
                                        
-					log.append(" username not registered\n");
+					log.append("Unregistered username\n");
 				}
                                                 } 
                                                 else{
                                                     ipmac ="wp";
                                                     
-                                                    log.append("wrong password\n");
+                                                    log.append("Wrong password was given\n");
                                                 }
                                 
                                 
@@ -456,7 +452,7 @@ public class VDOServer implements Runnable{
                                         {
                                            //duplicate login
                                             ipmac = "loggedin";
-                                            log.append(" Duplicate Login request");
+                                            log.append("Duplicate Login request\n");
                                         }
                                         packetSendMethod(ipmac);
                         }
@@ -481,14 +477,14 @@ public class VDOServer implements Runnable{
         {  
                         try
 			{       
-                                log.append("Ip Request from " +pdata[1]+" to "+pdata[2]+"\n");
+                                log.append("From " +pdata[1]+" to "+pdata[2]+"\n");
                                 stmt = con.prepareStatement("Select username from address where username= '"+pdata[2]+"';");
 				ResultSet rs1 = stmt.executeQuery();                          
                                 if(!rs1.
                                         next())
                                 {
                                     //invalid username
-                                    log.append("invalid user \n");
+                                    log.append("Invalid user \n");
                                     ipmac = "not";
                                 }
                                 else
@@ -503,13 +499,13 @@ public class VDOServer implements Runnable{
                                         String ip = rs2.getString("ip_add");
                                         if(rs2.wasNull())
                                         {
-                                            log.append("inside if rs.wasnull() ie user offline");
+                                            //log.append("inside if rs.wasnull() ie user offline");
                                             ipmac = "dull";
-                                            log.append(ipmac+ "\n");
+                                            log.append("User is offline\n");
                                         }
                                         else
                                         {
-                                            log.append("inside else rs.wasnull() ie user online");
+                                            //log.append("inside else rs.wasnull() ie user online");
                                             //check whether he is busy or not
                                             stmt = con.prepareStatement("Select busy from address where username= '"+pdata[2]+"';");
                                             ResultSet rs3 = stmt.executeQuery();
@@ -517,7 +513,7 @@ public class VDOServer implements Runnable{
                                             if(rs3.getString("busy").equals("N"))
                                             {
                                                 ipmac = ip;
-                                                log.append(ipmac+ "\n");  
+                                                log.append(ipmac+ " is the ip of requested user\n");  
                                                 //make the callie and caller busy
                                                 stmt = con.prepareStatement("Update address set busy = 'Y' where username = '"+pdata[1]+"';");
                                                 stmt.executeUpdate();
@@ -527,7 +523,7 @@ public class VDOServer implements Runnable{
                                             else if(rs3.getString("busy").equals("Y"))
                                             {
                                                 ipmac = "busy";
-                                                log.append(ipmac+ "\n");
+                                                log.append("User busy on another call\n");
                                             }
                                         }
                                     }
@@ -536,15 +532,15 @@ public class VDOServer implements Runnable{
                         }
                         catch(SQLException se)
 			{
-				log.append("ERRORsql: " + se.getMessage() + "\n");
+				log.append("ERROR: " + se.getMessage() + "\n");
 			}
 			catch(IOException ie)
 			{
-				log.append("ERRORio : " + ie.getMessage() + "\n");
+				log.append("ERROR : " + ie.getMessage() + "\n");
 			}
 			catch(Exception e)
                         {
-                                log.append("ERRORgen : " + e.getMessage() + "\n");
+                                log.append("ERROR : " + e.getMessage() + "\n");
                         }
 			//notify that this thread has completed its task, and other can now access the DB
 			notifyAll();
@@ -562,7 +558,7 @@ public class VDOServer implements Runnable{
 					receivePacket.getPort() );
 						//send this packet
             socket.send(sendPacket);
-            log.append(ipmac+ " this is the data sent\n");
+            //log.append(ipmac+ " this is the data sent\n");
         }
         private synchronized void changePasswordMethod() {
             		try
@@ -575,7 +571,7 @@ public class VDOServer implements Runnable{
                                 if(rs1.getString(1).equals(pdata[2]))
                                 {
                                     //invalid username
-                                    log.append("Given old password is correct\n");
+                                    //log.append("Given old password is correct\n");
                                     if(pdata[3].equals(pdata[4]))
                                     {
                                         stmt = con.prepareStatement("Update address set password = '"+pdata[3]+"' where username = '"+pdata[1]+"';");
@@ -591,15 +587,15 @@ public class VDOServer implements Runnable{
                           }
                         catch(SQLException se)
 			{
-				log.append("ERRORsql: " + se.getMessage() + "\n");
+				log.append("ERROR: " + se.getMessage() + "\n");
 			}
 			catch(IOException ie)
 			{
-				log.append("ERRORio : " + ie.getMessage() + "\n");
+				log.append("ERROR : " + ie.getMessage() + "\n");
 			}
 			catch(Exception e)
                         {
-                                log.append("ERRORgen : " + e.getMessage() + "\n");
+                                log.append("ERROR : " + e.getMessage() + "\n");
                         }
 			//notify that this thread has completed its task, and other can now access the DB
 			notifyAll();
@@ -611,7 +607,7 @@ public class VDOServer implements Runnable{
             try
 			{
                                 //pdata1 me from
-                                log.append("Logout Request from " +pdata[1]+"\n");
+                                log.append("From " +pdata[1]+"\n");
                                 stmt = con.prepareStatement("Update address set ip_add = null where username = '"+pdata[1]+"';");
                                 int i = stmt.executeUpdate();
                                 stmt = con.prepareStatement("Update address set busy = 'N' where username = '"+pdata[1]+"';");
@@ -623,15 +619,15 @@ public class VDOServer implements Runnable{
                           }
                         catch(SQLException se)
 			{
-				log.append("ERRORsql: " + se.getMessage() + "\n");
+				log.append("ERROR: " + se.getMessage() + "\n");
 			}
 			catch(IOException ie)
 			{
-				log.append("ERRORio : " + ie.getMessage() + "\n");
+				log.append("ERROR: " + ie.getMessage() + "\n");
 			}
 			catch(Exception e)
                         {
-                                log.append("ERRORgen : " + e.getMessage() + "\n");
+                                log.append("ERROR: " + e.getMessage() + "\n");
                         }
 			//notify that this thread has completed its task, and other can now access the DB
 			notifyAll();
@@ -640,14 +636,14 @@ public class VDOServer implements Runnable{
         }
 
         private void freeUserMethod() {
-                                 log.append("Free me Request from " +pdata[1]+"\n");
+                                 log.append("Free me Request \nFrom " +pdata[1]+"\n");
                 try {
                     stmt = con.prepareStatement("Update address set busy = 'N' where username = '"+pdata[1]+"';");
                     int i=stmt.executeUpdate();
                     if(i>0)
                         ipmac = "free";
                     packetSendMethod(ipmac);
-                    log.append("User freed from server side");
+                    log.append("User Available for other calls\n");
                     
                 } catch (SQLException ex) {
                     log.append("ERROR: "+ ex.getMessage());
@@ -660,13 +656,13 @@ public class VDOServer implements Runnable{
         private void groupIpMethod() {
             try
 			{       
-                                log.append("Ip Request from " +pdata[1]+" to "+pdata[2]+"\n");
+                                log.append("from " +pdata[1]+" to "+pdata[2]+"\n");
                                 stmt = con.prepareStatement("Select username from address where username= '"+pdata[2]+"';");
 				ResultSet rs1 = stmt.executeQuery();                          
                                 if(!rs1.next())
                                 {
                                     //invalid username
-                                    log.append("invalid user \n");
+                                    log.append("Invalid user \n");
                                     ipmac = "not";
                                 }
                                 else
@@ -681,13 +677,14 @@ public class VDOServer implements Runnable{
                                         String ip = rs2.getString("ip_add");
                                         if(rs2.wasNull())
                                         {
-                                            log.append("inside if rs.wasnull() ie user offline");
+                                            //log.append("inside if rs.wasnull() ie user offline");
                                             ipmac = "dull";
-                                            log.append(ipmac+ "\n");
+                                            log.append("User is offline\n");
+                                           // log.append(ipmac+ "\n");
                                         }
                                         else
                                         {
-                                            log.append("inside else rs.wasnull() ie user online");
+                                            //log.append("inside else rs.wasnull() ie user online");
                                             ipmac = ip;
                                            /* //check whether he is busy or not
                                             stmt = con.prepareStatement("Select busy from address where username= '"+pdata[2]+"';");
@@ -716,15 +713,15 @@ public class VDOServer implements Runnable{
                         }
                         catch(SQLException se)
 			{
-				log.append("ERRORsql: " + se.getMessage() + "\n");
+				log.append("ERROR: " + se.getMessage() + "\n");
 			}
 			catch(IOException ie)
 			{
-				log.append("ERRORio : " + ie.getMessage() + "\n");
+				log.append("ERROR : " + ie.getMessage() + "\n");
 			}
 			catch(Exception e)
                         {
-                                log.append("ERRORgen : " + e.getMessage() + "\n");
+                                log.append("ERROR : " + e.getMessage() + "\n");
                         }
 			
 			

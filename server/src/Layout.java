@@ -1,9 +1,6 @@
-/**
- *
- * @author Sumantra
- */
+
+//@author Sumantra
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +11,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 /*
  * this class sets the basic layout of the desktop server 
@@ -37,8 +30,6 @@ public class Layout extends JFrame implements ActionListener
 	private JTabbedPane pane;
 	//shows all registered clients
 	private ListUsers listUsers;
-        //tab to view databse
-       // private ViewDatabase VDb;
 	//setup the server
 	private ServerSetup setupServer;
 	//register a new user
@@ -62,32 +53,28 @@ public class Layout extends JFrame implements ActionListener
 	//server log label
 	private JLabel logLabel;
 	//Nimbus look and feel
-    private VDOServer vd;
+        private VDOServer vd;
+        //server time stamp
+        //private ServerTime st;
 	
 	
 	public Layout()
 	{
-            super("Video Conferencing Server");
-            //this is to set the image of the jpanel to our rquired image....    
+            super("Video Chat Server");
                try
                {
-               String dir = System.getProperty("user.dir");
-               Image img= ImageIO.read(new File(dir+"\\"+"server.jpg"));
-               setIconImage(img);
+                    String dir = System.getProperty("user.dir");
+                    Image img= ImageIO.read(new File(dir+"\\"+"server.jpg"));
+                    setIconImage(img);
                }
-        catch(Exception e)
-        {
-            System.out.println("Error image: " + e.getMessage());
-        }
-               
-		 
-		pane = new JTabbedPane();
-		
+               catch(Exception e)
+                {
+                    System.out.println("Error image: " + e.getMessage());
+                }
+                pane = new JTabbedPane();
 		listUsers = new ListUsers();
-		
 		logPanel = new JPanel();
 		logPanel.setLayout(new BorderLayout());
-		
 		buttonPanel = new JPanel();
 		start = new JButton("Start Server");
 		buttonPanel.add(start);
@@ -95,46 +82,32 @@ public class Layout extends JFrame implements ActionListener
 		buttonPanel.add(setup);
                 clear = new JButton("Save and Clear Log");
 		buttonPanel.add(clear);
-                
-		
-		Server = new JPanel();
+                Server = new JPanel();
 		Server.setLayout(new BorderLayout());
 		Server.add(buttonPanel,BorderLayout.NORTH);
-		
 		log = new JTextArea(getWidth(), getHeight());
                 log.setEditable(false);
 		logLabel = new JLabel("Server Log : ");
 		logPanel.add(logLabel,BorderLayout.NORTH);
-		
 		registerUsers = new UserRegistration(log);
-		
 		scrollPane = new JScrollPane(log);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
 		logPanel.add(scrollPane,BorderLayout.CENTER);
-		
 		Server.add(logPanel,BorderLayout.CENTER);
-                
-               // VDb = new ViewDatabase(log);
-		
 		//add all the tabs
 		pane.addTab("Server", Server);
 		pane.addTab("Status", listUsers);
 		pane.addTab("Clients", registerUsers);
-                //pane.addTab("Database", VDb);
 		add(pane);
-		
 		setupServer = new ServerSetup(log);
-		
 		start.addActionListener(this);
 		setup.addActionListener(this);
 		clear.addActionListener(this);
-                
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(650,450);
 		setLocation(getWidth()/2,getHeight()/2);
-		setResizable(false);
+		setResizable(true);
 		setVisible(true);
 	}
 	
@@ -160,6 +133,7 @@ public class Layout extends JFrame implements ActionListener
                             log.append("\n@SavingLog");
                             logwriter();
                             JOptionPane.showMessageDialog(null, "Exiting Server; Saving Log");
+                            //st.socketT.close();
                           /*  vd.socket.close();
                             setVisible(false);
                             new AdminLogin();
@@ -179,8 +153,7 @@ public class Layout extends JFrame implements ActionListener
                 {
                     log.append("\n@SavingLog"); 
                     logwriter();
-            JOptionPane.showMessageDialog(this,"Saved");
-        
+                    JOptionPane.showMessageDialog(this,"Saved");
                     log.setText("");
             }
 	}
@@ -198,8 +171,8 @@ public class Layout extends JFrame implements ActionListener
                              String[] lines = log.getText().split("\\n");
                              while(!(lines[i].equals("@SavingLog")))
                              {
-                             outfile.append(lines[i++]);
-                             outfile.newLine();
+                                 outfile.append(lines[i++]);
+                                 outfile.newLine();
                              }
                              outfile.close();
                          

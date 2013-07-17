@@ -1,18 +1,6 @@
 
 import java.io.File;
-import java.io.IOException;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Sumantra
- */
+//@author Sumantra
 public class FirstBoot {
 
     public FirstBoot()
@@ -30,7 +18,7 @@ public class FirstBoot {
                          }
                          
                          else
-                         new AdminLogin();
+                             new AdminLogin();
                          
     }
     

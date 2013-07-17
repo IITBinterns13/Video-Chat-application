@@ -140,6 +140,7 @@ public class OnlineChecker implements Runnable
 	 * it is called after every 5 SECS 
 	 */
 	public void refreshList()
+                
 	{
 		//statement to query DB for list of online clients
 		Statement stmt11 = null;            

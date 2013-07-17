@@ -7,7 +7,7 @@ import javax.swing.JTextArea;
  
 public class ListUsers extends JPanel {
     
-    //online users shown here
+        //online users shown here
 	private JTextArea online;
 	//off line users shown here
 	private JTextArea offline;
@@ -38,17 +38,13 @@ public class ListUsers extends JPanel {
 		add(pane);
 	}
 	
-	/*
-	 * return reference to online area
-	 */
+	//return reference to online Area
 	public JTextArea getOnlineArea()
 	{
 		return online;
 	}
 	
-	/*
-	 * return reference to off line area
-	 */
+	// return reference to off line Area
 	public JTextArea getOfflineArea()
 	{
 		return offline;

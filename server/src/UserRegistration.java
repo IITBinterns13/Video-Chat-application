@@ -67,6 +67,7 @@ public class UserRegistration extends JPanel implements ActionListener{
 	
 	//initialize the database variables only one time
 	private boolean flag; 
+    private ViewDatabase vd;
         
         //private ViewDatabase VDB;
         public UserRegistration()
@@ -92,11 +93,11 @@ public class UserRegistration extends JPanel implements ActionListener{
 		flag = true;
 		this.log = log;
 		UsrnmLabel = new JLabel("USERNAME");
-                UsrnmText = new JTextField(55);
+                UsrnmText = new JTextField(120);
 		PswdLabel = new JLabel("PASSWORD");
-		PswdText = new JPasswordField(55);
-		save = new JButton("      SAVE      ");
-		delete = new JButton("      DELETE      ");
+		PswdText = new JPasswordField(120);
+		save = new JButton("      REGISTER      ");
+		delete = new JButton("      UNREGISTER      ");
                 logout = new JButton("      KICK     ");
                 viewDB = new JButton("  VIEW DATABASE  ");
                 UsrnmLabel.setSize(100,100);
@@ -201,7 +202,7 @@ public class UserRegistration extends JPanel implements ActionListener{
                     else    
                     {
                         logoutMethod(UsrnmText.getText());
-                        JOptionPane.showMessageDialog(null, UsrnmText.getText()+"Logged out of Server");
+                        JOptionPane.showMessageDialog(null, UsrnmText.getText()+" Logged out of Server");
                         UsrnmText.setText("");
                         PswdText.setText("");
                         
@@ -209,7 +210,7 @@ public class UserRegistration extends JPanel implements ActionListener{
                 }
                 else if(v.getSource() == viewDB)
                 {
-                    new ViewDatabase();
+                    vd = new ViewDatabase();
                 }
 		//if delete button is clicked
                 else 
@@ -291,7 +292,7 @@ public class UserRegistration extends JPanel implements ActionListener{
             try
 			{
                                 //pdata1 me from
-                                log.append("Logout Request from " +user+"\n");
+                                log.append(user+" Logged out of server\n");
                                 stmt = con.prepareStatement("Update address set ip_add = null where username = '"+user+"';");
                                 int i = stmt.executeUpdate();
                                 stmt = con.prepareStatement("Update address set busy = 'N' where username = '"+user+"';");

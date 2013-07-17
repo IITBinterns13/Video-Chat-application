@@ -139,7 +139,7 @@ public class ServerSetup extends JFrame
 		 }	
 		 catch ( Exception exception ) 
 		 {
-			 log.append("ERRORgeneralinss : " + exception.getMessage() + "\n");
+			 log.append("ERROR : " + exception.getMessage() + "\n");
 		 }
 		
 		hostLabel = new JLabel("  Host Name  ");
@@ -198,15 +198,15 @@ public class ServerSetup extends JFrame
 		} 
     	catch (ParserConfigurationException e) 
     	{
-    		log.append("ERRORpceinss : " + e.getMessage() + "\n");
+    		log.append("ERROR : " + e.getMessage() + "\n");
 		}
     	catch (SAXException e) 
     	{
-    		log.append("ERRORsaxinss : " + e.getMessage() + "\n");
+    		log.append("ERROR : " + e.getMessage() + "\n");
 		} 
 		catch (IOException e) 
 		{
-			log.append("ERRORioinss : " + e.getMessage() + "\n");
+			log.append("ERROR : " + e.getMessage() + "\n");
 		}
 		
 		//read Server.xml file
@@ -304,12 +304,12 @@ public class ServerSetup extends JFrame
         catch(ClassNotFoundException ce)
         {
                     JOptionPane.showMessageDialog(null, ce.getMessage());
-                    log.append("ERRORcnfinss : " + ce.getMessage() + "\n");
+                    log.append("ERROR : " + ce.getMessage() + "\n");
         }
         catch(SQLException se)
         {
             JOptionPane.showMessageDialog(null, se.getMessage());
-                    log.append("ERRORsqlinss : " + se.getMessage() + "\n");
+                    log.append("ERROR : " + se.getMessage() + "\n");
         }
     }
 	
@@ -337,12 +337,12 @@ public class ServerSetup extends JFrame
 		catch(ClassNotFoundException ce)
 		{
                         JOptionPane.showMessageDialog(null, ce.getMessage());
-			log.append("ERRORCNF : " + ce.getMessage() + "\n");
+			log.append("ERROR : " + ce.getMessage() + "\n");
 		}
 		catch(SQLException se)
 		{
                     JOptionPane.showMessageDialog(null, se.getMessage());
-                    log.append("ERRORSQL : " + se.getMessage() + "\n");
+                    log.append("ERROR : " + se.getMessage() + "\n");
 		}
 	}
 	
@@ -391,12 +391,12 @@ public class ServerSetup extends JFrame
 		}
 		catch (TransformerConfigurationException e) 
 		{
-			log.append("ERRORtce : " + e.getMessage() + "\n");
+			log.append("ERROR : " + e.getMessage() + "\n");
 		}
 	
 		catch (TransformerException e) 
 		{
-			 log.append("ERRORte : " + e.getMessage() + "\n");
+			 log.append("ERROR : " + e.getMessage() + "\n");
 		}
 		
 		JOptionPane.showMessageDialog(null, "Changes successfully saved");
